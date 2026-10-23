@@ -418,16 +418,13 @@ bool application::initialize() {
 }
 
 void application::update(double time) {
-    static double lastTimestamp = 0.0;
+    static double lastTimestamp = -1.0;
     float delta = 0.0f;
-    if (time > 1.0) {
-        if (lastTimestamp == 0.0) lastTimestamp = time;
+    if (lastTimestamp >= 0.0) {
         delta = static_cast<float>(time - lastTimestamp);
-        lastTimestamp = time;
-    } else {
-        delta = static_cast<float>(time);
+        if (delta > 0.1f) delta = 0.1f;
     }
-    if (delta > 0.1f) delta = 0.1f;
+    lastTimestamp = time;
 
     //1.3
     if (gScene.playing) {
