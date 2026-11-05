@@ -1,17 +1,26 @@
 #version 450
 
 layout(location = 0) in vec3 inPos;
-layout(location = 1) in vec3 inColor;
+layout(location = 1) in vec3 inNormal;
 
-layout(location = 0) out vec3 fragColor;
-
-layout(binding = 0) uniform UniformBufferObject {
-    mat4 model;
+layout(set = 0, binding = 0, std140) uniform SceneUniforms {
     mat4 view;
     mat4 proj;
-} ubo;
+    vec4 cameraPos;
+    vec4 ambient;
+} scene;
+
+layout(set = 1, binding = 0, std140) uniform ModelUniforms {
+    mat4 model;
+    mat4 normalMatrix;
+} model;
+
+layout(location = 0) out vec3 vWorldPos;
+layout(location = 1) out vec3 vNormal;
 
 void main() {
-    gl_Position = ubo.proj * ubo.view * ubo.model * vec4(inPos, 1.0);
-    fragColor = vec3(inPos.y * 0.5 + 0.5, 0.0, 1.0 - (inPos.y * 0.5 + 0.5));
+    vec4 worldPos = model.model * vec4(inPos, 1.0);
+    vWorldPos = worldPos.xyz;
+    vNormal = normalize(mat3(model.normalMatrix) * inNormal);
+    gl_Position = scene.proj * scene.view * worldPos;
 }
