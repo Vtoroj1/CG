@@ -791,4 +791,8 @@ void submitAndPresent() {
 	}
 }
 
+VkCommandPool getCommandPool() {
+    return vk_command_pool;
+}
+
 } // namespace graphics::internal

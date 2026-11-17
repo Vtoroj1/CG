@@ -31,6 +31,7 @@ struct FrameData {
 };
 
 extern Context context;
+VkCommandPool getCommandPool();
 
 bool initialize(GLFWwindow* const window);
 void shutdown();
